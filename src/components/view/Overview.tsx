@@ -17,7 +17,7 @@ const Overview: React.FC<OverviewType> = ({ actionFunc, acctBalance }) => {
   return (
     <div>
       <h4 className="text-base font-bold mb-8 text-[26px]">Overview</h4>
-      <div className="grid grid-cols-3 space-x-4">
+      <div className="grid grid-cols-3 max-md:grid-cols-1 max-md:space-x-0 max-md:space-y-4 space-x-4">
         <Card
           title={"Account Type"}
           value={"Check in"}
@@ -42,7 +42,7 @@ const Overview: React.FC<OverviewType> = ({ actionFunc, acctBalance }) => {
           }
         />
 
-        <div className="flex flex-col justify-between">
+        <div className="flex flex-col justify-between max-md:space-y-4">
           <Button
             btnTitle="Deposit"
             handleClick={() => handleBtnClick("deposit")}

@@ -63,85 +63,94 @@ const Transactions: React.FC<TransactionProps> = ({ tableData }) => {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex max-lg:flex-col max-lg:items-start items-center justify-between mb-6">
         <h4 className="text-base font-bold  text-[26px]">Transactions</h4>
 
         {tableData.length > 0 && (
-          <div className="flex items-center space-x-2.5">
-            <div className="flex items-center space-x-2">
-              <label htmlFor="start" className="text-base font-medium">
-                Start date:
-              </label>
-              <input
-                type="date"
-                id="start"
-                name="startDate"
-                className="border rounded-md px-2 py-1"
-                onChange={(evt) => {
-                  setDateFilter((prev) => ({
-                    ...prev,
-                    startDate: evt.target.value,
-                  }));
-                }}
-                value={dateFilter.startDate}
-              />
-            </div>
-
-            {dateFilter.startDate && (
-              <div className="flex items-center space-x-2">
-                <label htmlFor="end" className="text-base font-medium">
-                  End date:
+          <div className="flex items-center space-x-2.5 max-sm:flex-col-reverse max-lg:space-x-0 max-sm:space-y-2.5 max-sm:items-start max-lg:justify-between max-lg:w-full">
+            <div className="flex items-center space-x-2.5 max-lg:flex-col max-lg:items-start max-lg:space-y-2 max-lg:space-x-0 max-sm:w-full">
+              <div className="flex items-center space-x-2 max-sm:w-full">
+                <label
+                  htmlFor="start"
+                  className="text-sm font-medium max-sm:whitespace-nowrap"
+                >
+                  Start date:
                 </label>
                 <input
                   type="date"
-                  id="end"
-                  name="endDate"
-                  className="border rounded-md px-2 py-1"
+                  id="start"
+                  name="startDate"
+                  className="border rounded-md px-2 py-2 max-sm:w-full outline-none text-sm font-medium"
                   onChange={(evt) => {
                     setDateFilter((prev) => ({
                       ...prev,
-                      endDate: evt.target.value,
+                      startDate: evt.target.value,
                     }));
                   }}
-                  value={dateFilter.endDate}
-                  min={dateFilter.startDate}
-                  // max="2018-12-31"
+                  value={dateFilter.startDate}
                 />
               </div>
-            )}
 
-            <select
-              name="filter"
-              id="filter"
-              className="py-2 pr-4 pl-2 text-sm custom font-medium rounded-md border w-[130px] border-gray-300 outline-none"
-              onChange={(evt) => setFilterType(evt.target.value)}
-            >
-              <option value={""}>Filter by</option>
-              <option value={"deposit"}>Deposits</option>
-              <option value={"withdraw"}>Withdrawal</option>
-            </select>
+              {dateFilter.startDate && (
+                <div className="flex items-center space-x-2 max-sm:w-full">
+                  <label
+                    htmlFor="end"
+                    className="text-sm font-medium max-sm:whitespace-nowrap"
+                  >
+                    End date:
+                  </label>
+                  <input
+                    type="date"
+                    id="end"
+                    name="endDate"
+                    className="border rounded-md px-2 py-2 max-sm:w-full outline-none text-sm font-medium"
+                    onChange={(evt) => {
+                      setDateFilter((prev) => ({
+                        ...prev,
+                        endDate: evt.target.value,
+                      }));
+                    }}
+                    value={dateFilter.endDate}
+                    min={dateFilter.startDate}
+                  />
+                </div>
+              )}
+            </div>
 
-            <select
-              name="sort"
-              id="sort"
-              className="py-2 pr-4 pl-2 text-sm custom font-medium rounded-md border w-[130px] border-gray-300 outline-none"
-              onChange={(evt) => setSortType(evt.target.value)}
-            >
-              <option value={""}>Sort by</option>
-              <option value={"asc"}>Ascending</option>
-              <option value={"desc"}>Descending</option>
-            </select>
+            <div className="flex items-center space-x-2.5  max-lg:flex-col max-lg:space-y-2 max-lg:space-x-0 max-sm:w-full max-sm:!mb-2.5">
+              <select
+                name="filter"
+                id="filter"
+                className="py-2 pr-4 pl-2 text-sm custom font-medium rounded-md border w-[130px]  outline-none max-sm:w-full"
+                onChange={(evt) => setFilterType(evt.target.value)}
+              >
+                <option value={""}>Filter by</option>
+                <option value={"deposit"}>Deposits</option>
+                <option value={"withdraw"}>Withdrawal</option>
+              </select>
+
+              <select
+                name="sort"
+                id="sort"
+                className="py-2 pr-4 pl-2 text-sm custom font-medium rounded-md border w-[130px]  outline-none max-sm:w-full"
+                onChange={(evt) => setSortType(evt.target.value)}
+              >
+                <option value={""}>Sort by</option>
+                <option value={"asc"}>Ascending</option>
+                <option value={"desc"}>Descending</option>
+              </select>
+            </div>
           </div>
         )}
       </div>
 
       <div>
-        <div className="grid grid-cols-5 px-4 py-2 bg-gray-100 font-semibold">
-          <span>S/N</span>
+        <div className="grid grid-cols-5 max-[800px]:grid-cols-3 max-sm:text-sm px-4 py-2 bg-gray-100 font-semibold">
+          <span className="max-[800px]:hidden">S/N</span>
           <span>Date</span>
           <span>Amount ($)</span>
           <span>Balance ($)</span>
-          <span>Transaction Type</span>
+          <span className="max-[800px]:hidden">Transaction Type</span>
         </div>
 
         {tableData.length > 0 ? (
@@ -155,17 +164,21 @@ const Transactions: React.FC<TransactionProps> = ({ tableData }) => {
               return (
                 <div
                   key={idx}
-                  className="grid grid-cols-5 px-4 font-medium py-3 border-b text-sm"
+                  className="grid grid-cols-5 max-[800px]:grid-cols-3 px-4 max-sm:text-xs font-medium py-3 border-b text-sm"
                 >
-                  <span>{idx + 1}</span>
-                  <span>{`${day}.${month}.${year}`}</span>
-                  <span>
+                  <span className="max-[800px]:hidden flex items-center">
+                    {idx + 1}
+                  </span>
+                  <span className="flex items-center">{`${day}.${month}.${year}`}</span>
+                  <span className="flex items-center">
                     {history.type !== "deposit" && "-"}
                     {history.amount.toLocaleString()}
                   </span>
-                  <span>{history.balance.toLocaleString()}</span>
+                  <span className="flex items-center">
+                    {history.balance.toLocaleString()}
+                  </span>
                   <span
-                    className={`px-3 py-2 w-fit rounded-lg text-xs font-semibold capitalize  ${
+                    className={`px-3 py-2 w-fit rounded-lg text-xs font-semibold capitalize max-[800px]:hidden flex items-center ${
                       history.type === "withdraw"
                         ? "bg-red-300/20"
                         : history.type === "transfer"
@@ -197,17 +210,13 @@ const Transactions: React.FC<TransactionProps> = ({ tableData }) => {
                       currentPage: page,
                     };
                   });
-                  // setSliceData({
-                  //   start: limitPerPage * (page - 1),
-                  //   end: limitPerPage * page,
-                  // });
                 }}
                 maxWidth={200}
               />
             </div>
           </div>
         ) : (
-          <span className="block text-center text-lg font-medium py-8">
+          <span className="block text-center text-lg max-sm:text-base font-medium py-8">
             You have no transaction history at this time
           </span>
         )}

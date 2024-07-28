@@ -11,6 +11,7 @@ export type tableDataType = {
 export type actionDataType = {
   amount: string;
   email?: string;
+  iban?: string;
 };
 
 export type pageDataType = {

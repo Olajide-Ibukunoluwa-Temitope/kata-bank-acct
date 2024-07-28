@@ -6,6 +6,7 @@ import ModalContainer from "./components/common/ModalContainer";
 import Button from "./components/common/Button";
 import { actionDataType, actionsType, tableDataType } from "./types";
 import toast, { Toaster } from "react-hot-toast";
+import { isValid as isValidIban } from "iban";
 
 const App: React.FC = () => {
   const [actionType, setActionType] = useState<actionsType | undefined>(
@@ -13,12 +14,14 @@ const App: React.FC = () => {
   );
   const [acctBalance, setAcctBalance] = useState<number>(10000);
   const [error, setError] = useState<boolean>(false);
+  const [ibanError, setIbanError] = useState<boolean>(false);
   const [transactionHistory, setTransactionHistory] = useState<tableDataType[]>(
     []
   );
   const [actionData, setActionData] = useState<actionDataType>({
     amount: "",
     email: "",
+    iban: "",
   });
 
   const handleChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
@@ -30,7 +33,7 @@ const App: React.FC = () => {
     }));
   };
 
-  const handleSubmit = () => {
+  const handlePerformAction = () => {
     if (actionType === "deposit") {
       setAcctBalance((prev) => prev + Number(actionData.amount));
       setTransactionHistory((prevState) => [
@@ -54,6 +57,7 @@ const App: React.FC = () => {
         ...prevState,
       ]);
     }
+
     toast.success(
       `${
         actionType === "withdraw"
@@ -62,6 +66,7 @@ const App: React.FC = () => {
             (actionType as string)?.slice(1)
       } successful!`
     );
+
     setActionType(undefined);
     setActionData({
       amount: "",
@@ -69,11 +74,25 @@ const App: React.FC = () => {
     });
   };
 
+  const handleSubmit = () => {
+    if (Number(actionData.amount) > acctBalance && actionType !== "deposit") {
+      setError(true);
+      return;
+    }
+    if (actionType === "transfer" && !isValidIban(actionData.iban as string)) {
+      setIbanError(true);
+
+      return;
+    }
+    setError(false);
+    handlePerformAction();
+  };
+
   return (
     <div className="bg-purple-100/20 min-h-screen">
       <Toaster position="top-right" />
       <Navbar />
-      <div className="p-10">
+      <div className="p-10 max-sm:px-4 max-sm:py-5">
         <div className="mb-12">
           <Overview actionFunc={setActionType} acctBalance={acctBalance} />
         </div>
@@ -83,8 +102,7 @@ const App: React.FC = () => {
 
       <ModalContainer
         open={Boolean(actionType)}
-        showCloseIcon={false}
-        tailwindClassName="w-[45%] max-lg:w-1/2 max-sm:w-[95%]"
+        tailwindClassName="w-[50%] max-lg:w-[80%] max-sm:w-[95%]"
         closeModal={() => {
           setActionType(undefined);
           setActionData({
@@ -98,17 +116,9 @@ const App: React.FC = () => {
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              if (
-                Number(actionData.amount) > acctBalance &&
-                actionType !== "deposit"
-              ) {
-                setError(true);
-              } else {
-                setError(false);
-                handleSubmit();
-              }
+              handleSubmit();
             }}
-            className="px-10 pt-3"
+            className="px-10 max-sm:px-5 pt-3"
           >
             <div className="flex flex-col items-center text-center">
               <div className="mb-5">
@@ -118,19 +128,34 @@ const App: React.FC = () => {
                 <span className="block text-lg font-medium">
                   Current Balance: ${acctBalance.toLocaleString()}
                 </span>
+                {actionType === "transfer" && (
+                  <span className="block text-sm font-medium">
+                    Test IBAN: GB29 NWBK 6016 1331 9268 19
+                  </span>
+                )}
               </div>
 
               <div className="space-y-3 w-full">
                 {actionType === "transfer" && (
-                  <input
-                    type="email"
-                    name="email"
-                    value={actionData.email}
-                    placeholder={`Enter receiver's interac email address`}
-                    onChange={handleChange}
-                    required
-                    className="w-full border border-gray-300 outline-none h-[48px] rounded-md px-4"
-                  />
+                  <div>
+                    {/* valid IBAN: GB29 NWBK 6016 1331 9268 19 */}
+                    {/* invalid IBAN: GB94 BARC 2020 1835 3322 99 */}
+
+                    <input
+                      type="text"
+                      name="iban"
+                      value={actionData.iban}
+                      placeholder={`Enter IBAN (example: GB29 NWBK 6016 1331 9268 19)`}
+                      onChange={handleChange}
+                      required
+                      className="w-full border border-gray-300 outline-none h-[48px] rounded-md px-4"
+                    />
+                    {ibanError && (
+                      <span className="block mt-1 text-red-500 text-left font-medium text-sm">
+                        *Invalid IBAN. Please enter a valid IBAN.
+                      </span>
+                    )}
+                  </div>
                 )}
 
                 <div>

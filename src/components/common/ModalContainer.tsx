@@ -6,7 +6,6 @@ type ModalContainerProps = {
   closeModal?: () => void;
   tailwindClassName?: string;
   modalClassName?: string;
-  showCloseIcon?: boolean;
   modalRef?: React.RefObject<HTMLDivElement>;
 };
 
@@ -16,7 +15,6 @@ const ModalContainer: React.FC<ModalContainerProps> = ({
   closeModal,
   tailwindClassName,
   modalClassName,
-  showCloseIcon,
   modalRef,
 }) => {
   return open ? (
@@ -33,11 +31,6 @@ const ModalContainer: React.FC<ModalContainerProps> = ({
       >
         {children}
       </div>
-      {/* {showCloseIcon && (
-                <span className="material-icons text-white text-3xl absolute right-4 sm:right-9 top-6 cursor-pointer font-bold bg-opacity-100">
-                    close
-                </span>
-            )} */}
     </div>
   ) : null;
 };
