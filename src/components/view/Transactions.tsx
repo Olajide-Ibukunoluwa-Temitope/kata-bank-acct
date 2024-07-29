@@ -203,7 +203,6 @@ const Transactions: React.FC<TransactionProps> = ({ tableData }) => {
                 current={pageData?.currentPage}
                 total={pageData.lastPage}
                 onPageChange={(page) => {
-                  console.log("pageeee", page);
                   setPageData((prev) => {
                     return {
                       ...prev,
