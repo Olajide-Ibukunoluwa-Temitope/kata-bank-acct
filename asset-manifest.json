@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/kata-bank-acct/static/css/main.65ace6c8.css",
+    "main.js": "/kata-bank-acct/static/js/main.b90e4d07.js",
+    "static/js/453.b513a308.chunk.js": "/kata-bank-acct/static/js/453.b513a308.chunk.js",
+    "index.html": "/kata-bank-acct/index.html",
+    "main.65ace6c8.css.map": "/kata-bank-acct/static/css/main.65ace6c8.css.map",
+    "main.b90e4d07.js.map": "/kata-bank-acct/static/js/main.b90e4d07.js.map",
+    "453.b513a308.chunk.js.map": "/kata-bank-acct/static/js/453.b513a308.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.65ace6c8.css",
+    "static/js/main.b90e4d07.js"
+  ]
+}
